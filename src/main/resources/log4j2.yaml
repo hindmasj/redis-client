@@ -15,6 +15,13 @@ Configuration:
         additivity: false
         AppenderRef:
           ref: CONSOLE
+      -
+        # This section has no function. Jedis needs log4j.properties.
+        name: redis.clients.jedis
+        level: debug
+        additivity: false
+        AppenderRef:
+          ref: CONSOLE
     Root:
       level: warn
       AppenderRef:

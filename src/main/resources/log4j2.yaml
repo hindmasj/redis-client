@@ -1,0 +1,21 @@
+Configuration:
+  status: warn
+  appenders:
+    Console:
+      name: CONSOLE
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%d redis-client [%t] %-5p %c %m%n"
+
+  Loggers:
+    logger:
+      -
+        name: io.github.hindmasj
+        level: debug
+        additivity: false
+        AppenderRef:
+          ref: CONSOLE
+    Root:
+      level: warn
+      AppenderRef:
+        ref: CONSOLE

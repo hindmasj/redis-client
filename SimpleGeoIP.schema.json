@@ -1,0 +1,48 @@
+{
+  "id": 384746,
+  "num_rows": 1000,
+  "file_format": "json",
+  "name": "SimpleGeoIP",
+  "array": true,
+  "columns": [
+    {
+      "name": "ipv4",
+      "null_percentage": 0,
+      "type": "IP Address v4 CIDR",
+      "formula": null
+    },
+    {
+      "name": "country",
+      "null_percentage": 0,
+      "type": "Country",
+      "countries": [
+
+      ],
+      "formula": null
+    },
+    {
+      "name": "city",
+      "null_percentage": 0,
+      "type": "City",
+      "formula": null
+    },
+    {
+      "name": "provider",
+      "null_percentage": 0,
+      "type": "Fake Company Name",
+      "formula": null
+    },
+    {
+      "name": "latitude",
+      "null_percentage": 0,
+      "type": "Latitude",
+      "formula": null
+    },
+    {
+      "name": "longitude",
+      "null_percentage": 0,
+      "type": "Longitude",
+      "formula": null
+    }
+  ]
+}

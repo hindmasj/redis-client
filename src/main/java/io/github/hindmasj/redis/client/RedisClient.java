@@ -29,31 +29,35 @@ public class RedisClient{
     jedisPool=new JedisPool(poolConfig,getRedisHost(),getRedisPort());
 
     RedisClient client=new RedisClient();
-    client.run(argv);
+    client.runDemo(argv);
   }
 
-  private void run(String[] argv){
-    logger.info("Now running");
+  private void runDemo(String[] argv){
+    logger.info("Now running the demo");
     try(Jedis connection=jedisPool.getResource()){
       connection.auth(getRedisPassword());
-      connection.set("clientName","jedis");
+      connection.flushDB();
+      connection.set("bill","hello world");
+      connection.set("fred","how are you");
       logger.info(String.format("Bill is: %s",connection.get("bill")));
       logger.info(String.format("Fred is: %s",connection.get("fred")));
+      connection.flushDB();
+      logger.info(String.format("Bill is now: %s",connection.get("bill")));
     }
     logger.info("Run complete");
   }
 
-  private static String getRedisPassword(){
+  static String getRedisPassword(){
     String cipherpass=config.getString(CFG_AUTH_PASSWORD);
     Cryptography decryptor=new Cryptography(config);
     return decryptor.decrypt(cipherpass);
   }
 
-  private static String getRedisHost(){
+  static String getRedisHost(){
     return config.getString(CFG_SERVER_HOST);
   }
 
-  private static int getRedisPort(){
+  static int getRedisPort(){
     return config.getInt(CFG_SERVER_PORT);
   }
 

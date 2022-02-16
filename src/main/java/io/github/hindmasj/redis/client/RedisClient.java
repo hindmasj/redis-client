@@ -44,7 +44,9 @@ public class RedisClient{
   }
 
   private static String getRedisPassword(){
-    return config.getString(CFG_AUTH_PASSWORD);
+    String cipherpass=config.getString(CFG_AUTH_PASSWORD);
+    Cryptography decryptor=new Cryptography(config);
+    return decryptor.decrypt(cipherpass);
   }
 
   private static String getRedisHost(){
@@ -53,6 +55,10 @@ public class RedisClient{
 
   private static int getRedisPort(){
     return config.getInt(CFG_SERVER_PORT);
+  }
+
+  static Config getConfig(){
+    return config;
   }
 
 }

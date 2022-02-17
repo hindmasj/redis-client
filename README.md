@@ -12,7 +12,7 @@ Run the script ``demo.sh`` to run the client in demo mode. This connects to the 
 
 ## Change The Password
 
-The docker article uses the environment variable *REDIS_PASSWORD* to set the passowrd for the database, and uses the unimaginative value of "password". If you want to change this then you need to get the demo to match it.
+The docker article uses the environment variable *REDIS_PASSWORD* to set the password for the database, and uses the unimaginative value of "password". If you want to change this then you need to get the demo to match it.
 
 Run the script ``encrypt.sh`` to run the encryption procedure on your chosen password. Then change the value in "src/main/resources/reference.conf" and repackage. Then you can run the demo again.
 

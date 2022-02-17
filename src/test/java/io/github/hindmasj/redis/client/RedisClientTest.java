@@ -1,11 +1,8 @@
 package io.github.hindmasj.redis.client;
 
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigValueFactory;
 
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.Test;
 
 public class RedisClientTest{

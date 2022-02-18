@@ -91,10 +91,10 @@ public class GeoipFileParser{
     writer.write("$3\r\n");
     writer.write("SET\r\n");
     String key=entry.getKey();
-    writer.write(String.format("%d\r\n",key.length()));
+    writer.write(String.format("$%d\r\n",key.length()));
     writer.write(String.format("%s\r\n",key));
     String value=entry.getValue();
-    writer.write(String.format("%d\r\n",value.length()));
+    writer.write(String.format("$%d\r\n",value.length()));
     writer.write(String.format("%s\r\n",value));
 
   }

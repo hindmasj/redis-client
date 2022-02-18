@@ -63,8 +63,8 @@ etc.
 
 ## Uploading
 
-The output of the parsing can then be uploaded directly to the database using the redis-cli command.
+The output of the parsing can then be uploaded directly to the database using the redis-cli command. (Note there is no "-t" in the docker command, as you might usually type.)
 
 ```
-docker exec -it redis redis-cli --pass <password> --pipe < <bulkfile>
+docker exec -i redis redis-cli --pass <password> --pipe < <bulkfile>
 ```

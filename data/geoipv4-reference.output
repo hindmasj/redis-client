@@ -1,35 +1,35 @@
 *3
 $3
 SET
-23
+$23
 geoipv4.23.18.226.27/28
-131
+$131
 {"ipv4":"23.18.226.27/28","country":"China","city":"Shajia’ao","provider":"Barrows LLC","latitude":28.90388,"longitude":121.310873}
 *3
 $3
 SET
-26
+$26
 geoipv4.255.166.103.119/22
-141
+$141
 {"ipv4":"255.166.103.119/22","country":"Dominica","city":"Castle Bruce","provider":"O'Kon LLC","latitude":15.4418966,"longitude":-61.2583352}
 *3
 $3
 SET
-25
+$25
 geoipv4.111.102.105.93/24
-144
+$144
 {"ipv4":"111.102.105.93/24","country":"Indonesia","city":"Krajan Jamprong","provider":"Beatty and Sons","latitude":-6.9604,"longitude":111.6157}
 *3
 $3
 SET
-25
+$25
 geoipv4.45.220.216.195/18
-144
+$144
 {"ipv4":"45.220.216.195/18","country":"Greenland","city":"Paamiut","provider":"Hane, Legros and Waters","latitude":61.9919,"longitude":-49.6572}
 *3
 $3
 SET
-26
+$26
 geoipv4.218.202.177.151/24
-153
+$153
 {"ipv4":"218.202.177.151/24","country":"Montenegro","city":"Pljevlja","provider":"Rowe, Kautzer and Sawayn","latitude":43.3582371,"longitude":19.3512591}

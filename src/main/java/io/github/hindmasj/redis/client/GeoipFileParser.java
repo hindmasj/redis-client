@@ -31,27 +31,65 @@ public class GeoipFileParser{
   private JsonStructure data;
   private Map<String,String> parsedData=new Hashtable<String,String>();
 
+  public static final void main(String[] args) throws Exception{
+    if(args.length==0){
+      logger.error("You need to specify an output file.");
+      System.exit(1);
+    }
+    String outputFileName=args[0];
+
+    GeoipFileParser parser=new GeoipFileParser(RedisClient.getConfig());
+    if(!parser.loadFile()){
+      logger.error("Could not load input file.");
+      System.exit(2);
+    }
+    logger.info(String.format("Loaded file %s",parser.getFileName()));
+    parser.parseFile();
+    logger.info(String.format(
+      "File parsed into memory with %d records.",parser.getRecordCount()));
+    parser.writeFile(Paths.get(outputFileName));
+    logger.info(String.format(
+      "Records written to output file %s.",outputFileName));
+  }
+
   public GeoipFileParser(Config config){
     this.config=config;
   }
 
-  private JsonReader getJsonReader(Path filePath) throws FileNotFoundException{
-    File dataFile=filePath.toFile();
-    FileReader fileReader=new FileReader(dataFile);
-    return Json.createReader(fileReader);
+  public int getRecordCount(){
+    return parsedData.size();
   }
 
-  public void loadFile(){
-    fileName=config.getString(CFG_INPUT_FILE);
+  public String getFileName(){
+    return fileName;
+  }
+
+  public boolean isFileLoaded(){
+    return fileLoaded;
+  }
+
+  public boolean isFileParsed(){
+    return fileParsed;
+  }
+
+  public boolean loadFile(){
+    return loadFile(config.getString(CFG_INPUT_FILE));
+  }
+
+  public boolean loadFile(String fileName){
+    fileLoaded=false;
     filePath=Paths.get(fileName);
     try{
       JsonReader reader=getJsonReader(filePath);
       data=reader.read();
       fileLoaded=true;
       logger.info(String.format("Data file %s loaded",fileName));
+      this.fileName=fileName;
       reader.close();
+      return true;
     }catch(FileNotFoundException e){
       logger.error(String.format("Failed to load data file :%s",fileName),e);
+      return false;
     }
   }
 
@@ -85,6 +123,12 @@ public class GeoipFileParser{
     writer.close();
   }
 
+  private JsonReader getJsonReader(Path filePath) throws FileNotFoundException{
+    File dataFile=filePath.toFile();
+    FileReader fileReader=new FileReader(dataFile);
+    return Json.createReader(fileReader);
+  }
+
   private void writeEntry(Writer writer,Map.Entry<String,String> entry)
     throws IOException{
     writer.write("*3\r\n");
@@ -94,7 +138,7 @@ public class GeoipFileParser{
     writer.write(String.format("$%d\r\n",key.length()));
     writer.write(String.format("%s\r\n",key));
     String value=entry.getValue();
-    writer.write(String.format("$%d\r\n",value.length()));
+    writer.write(String.format("$%d\r\n",value.getBytes().length));
     writer.write(String.format("%s\r\n",value));
 
   }
@@ -118,22 +162,6 @@ public class GeoipFileParser{
       logger.info(String.format("Suspect record: %s",object));
       throw e;
     }
-  }
-
-  public int getRecordCount(){
-    return parsedData.size();
-  }
-
-  public String getFileName(){
-    return fileName;
-  }
-
-  public boolean isFileLoaded(){
-    return fileLoaded;
-  }
-
-  public boolean isFileParsed(){
-    return fileParsed;
   }
 
 }

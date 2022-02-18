@@ -48,7 +48,7 @@ public class GeoipFileParserTest{
     testSubject.loadFile();
     testSubject.parseFile();
     assertTrue(testSubject.isFileParsed());
-    assertEquals(5,testSubject.getRecordCount());
+    assertEquals(6,testSubject.getRecordCount());
   }
 
   @Test
@@ -70,7 +70,7 @@ public class GeoipFileParserTest{
 
   @After
   public void tearDown() throws IOException{
-    //Files.deleteIfExists(outputFile);
+    Files.deleteIfExists(outputFile);
   }
 
 }

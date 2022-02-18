@@ -8,13 +8,13 @@ See the article [Some Redis Notes](https://hindmasj.github.io/misc/redis.html) w
 
 ## Run The Demo
 
-Run the script ``demo.sh`` to run the client in demo mode. This connects to the docker server and runs some commands to create, retrieve and delete data.
+Run the script ``bin/demo.sh`` to run the client in demo mode. This connects to the docker server and runs some commands to create, retrieve and delete data.
 
 ## Change The Password
 
 The docker article uses the environment variable *REDIS_PASSWORD* to set the password for the database, and uses the unimaginative value of "password". If you want to change this then you need to get the demo to match it.
 
-Run the script ``encrypt.sh`` to run the encryption procedure on your chosen password. Then change the value in "src/main/resources/reference.conf" and repackage. Then you can run the demo again.
+Run the script ``bin/encrypt.sh`` to run the encryption procedure on your chosen password. Then change the value in "src/main/resources/reference.conf" and repackage. Then you can run the demo again.
 
 TODO: Allow the use of a local "application.conf" to alter settings.
 
@@ -33,7 +33,7 @@ sed -i s%/1[0-5]'"'%/28'"'% sample-geo-data.json
 
 The password as stored in the configuration file in key "auth.password" is encrypted to avoid casual copying. This uses [jasypt](http://www.jasypt.org/) and their *StandardPBEStringEncryptor* class. This requires a simple cipher key to be used for uniqueness and repeatability. The key is stored in *reference.conf* under the key "auth.ckey", so while it exists in the source code it can be changed without recompiling (by updating the file in the JAR) but does not get seen directly in the file system.
 
-The encrypted password is stored in the configuration file and is then decrypted by the client just before it is presented to the server. See the note above about encrypting the password with the ``encrypt.sh`` script.
+The encrypted password is stored in the configuration file and is then decrypted by the client just before it is presented to the server. See the note above about encrypting the password with the ``bin/encrypt.sh`` script.
 
 # File uploading
 
@@ -59,7 +59,19 @@ $145\r\n
 ...
 ```
 
-etc.
+To parse a file the input file is specific in the config file under the key "files.geoipv4.source".
+
+```
+files{
+  geoipv4{
+    source=data/sample-geo-data.json
+  }
+}
+```
+
+Run the script ``bin/parse.sh <bulkfile>`` to parse this file into the specific output file. Then use the command in the next section to upload it.
+
+TODO: allow the user to specify the input file on the command line.
 
 ## Uploading
 

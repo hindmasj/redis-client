@@ -3,4 +3,5 @@
 {"ipv4":"45.220.216.195/18","country":"Greenland","city":"Paamiut","provider":"Hane, Legros and Waters","latitude":61.9919,"longitude":-49.6572},
 {"ipv4":"218.202.177.151/24","country":"Montenegro","city":"Pljevlja","provider":"Rowe, Kautzer and Sawayn","latitude":43.3582371,"longitude":19.3512591},
 {"ipv4":"23.18.226.27/28","country":"China","city":"Shajia’ao","provider":"Barrows LLC","latitude":28.90388,"longitude":121.310873},
-{"ipv4":"169.104.22.18/21","country":"Vietnam","city":"Thành Phố Hạ Long","provider":"Jacobs-Weber","latitude":20.9711977,"longitude":107.0448069}]
+{"ipv4":"169.104.22.18/21","country":"Vietnam","city":"Thành Phố Hạ Long","provider":"Jacobs-Weber","latitude":20.9711977,"longitude":107.0448069},
+{"ipv4":"54.9.47.164/32","country":"Philippines","city":"San Miguel","provider":"Rippin, Wyman and Smith","latitude":8.955271,"longitude":126.009711}]

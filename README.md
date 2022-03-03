@@ -80,3 +80,28 @@ The output of the parsing can then be uploaded directly to the database using th
 ```
 docker exec -i redis redis-cli --pass <password> --pipe < <bulkfile>
 ```
+
+## Subnet Links
+
+The parse feature adds a number of link records, so that for every IPv4 address covered by the subnet, there can be a link record such that the key is the IPv4 address, and the value is the subnet CIDR, prefixed with a "#". This file is automatically created when you run "parse.sh" and produces a file called *links-&lt;bulkfile&gt;*.
+
+Upload this file to the database in the same way as above.
+
+Then you can put this together with a 2 step search to find the GeoIP information for a test address such as "111.102.105.112". First form a "/32" search key from the address. Then, if the response is a string beginning with "#" perform a new search using the provided link.
+
+```
+get geoipv4.111.102.105.112/32
+$18
+#111.102.105.93/24
+get geoipv4.111.102.105.93/24
+$144
+{"ipv4":"111.102.105.93/24","country":"Indonesia","city":"Krajan Jamprong","provider":"Beatty and Sons","latitude":-6.9604,"longitude":111.6157}
+```
+
+If there is a "/32" entry then it will be returned without needing to use the link. Try "172.78.81.101".
+
+```
+get geoipv4.172.78.81.101/32
+$142
+{"ipv4":"172.78.81.101/32","country":"China","city":"Damu","provider":"Barrows, Lang and Leannon","latitude":24.134518,"longitude":111.485304}
+```

@@ -22,6 +22,12 @@
       <version>2.17.1</version>
     </dependency>
 
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>3.8.0</version>
+    </dependency>
+
     <!-- Needed for the log4j2 Yaml configuration -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

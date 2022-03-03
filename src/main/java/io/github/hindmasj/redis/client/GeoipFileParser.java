@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import javax.json.*;
 
+import org.apache.commons.net.util.SubnetUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -18,6 +19,9 @@ public class GeoipFileParser{
   public static final String CFG_INPUT_FILE="files.geoipv4.source";
   public static final String KEY_PREFIX="geoipv4.";
   public static final String KEY_FIELD="ipv4";
+  public static final String LINK_PREFIX="#";
+  public static final String LINK_SUFFIX="/32";
+  public static final String LINK_FILE_PREFIX="links-";
 
   private static final Logger logger = LogManager.getLogger();
 
@@ -50,6 +54,12 @@ public class GeoipFileParser{
     parser.writeFile(Paths.get(outputFileName));
     logger.info(String.format(
       "Records written to output file %s.",outputFileName));
+
+    String linksFileName=LINK_FILE_PREFIX+outputFileName;
+    parser.writeLinksFile(Paths.get(linksFileName));
+    logger.info(String.format(
+      "Link records written to output file %s.",linksFileName));
+
   }
 
   public GeoipFileParser(Config config){
@@ -123,21 +133,52 @@ public class GeoipFileParser{
     writer.close();
   }
 
+  public void writeLinksFile(Path outputFile) throws IOException{
+    Writer writer=new FileWriter(outputFile.toFile());
+    for(Map.Entry<String,String> entry : parsedData.entrySet()){
+      writeLinkEntry(writer,entry);
+    }
+    writer.close();
+  }
+
   private JsonReader getJsonReader(Path filePath) throws FileNotFoundException{
     File dataFile=filePath.toFile();
     FileReader fileReader=new FileReader(dataFile);
     return Json.createReader(fileReader);
   }
 
+  private void writeLinkEntry(Writer writer,Map.Entry<String,String> entry)
+  throws IOException{
+    String net=entry.getKey().substring(KEY_PREFIX.length());
+    SubnetUtils.SubnetInfo info=new SubnetUtils(net).getInfo();
+    String link=LINK_PREFIX+net;
+
+    //No need for links for /32 subnets
+    if(info.getAddressCountLong()!=0){
+      String nwAddress=info.getNetworkAddress();
+      writeEntry(writer,KEY_PREFIX+nwAddress+LINK_SUFFIX,link);
+      String[] addresses=info.getAllAddresses();
+      for(String address : addresses){
+        String key=KEY_PREFIX+address+LINK_SUFFIX;
+        writeEntry(writer,key,link);
+      }
+      String bcastAddress=info.getBroadcastAddress();
+      writeEntry(writer,KEY_PREFIX+bcastAddress+LINK_SUFFIX,link);
+    }
+  }
+
   private void writeEntry(Writer writer,Map.Entry<String,String> entry)
     throws IOException{
+      writeEntry(writer,entry.getKey(),entry.getValue());
+  }
+
+  private void writeEntry(Writer writer,String key, String value)
+  throws IOException{
     writer.write("*3\r\n");
     writer.write("$3\r\n");
     writer.write("SET\r\n");
-    String key=entry.getKey();
     writer.write(String.format("$%d\r\n",key.length()));
     writer.write(String.format("%s\r\n",key));
-    String value=entry.getValue();
     writer.write(String.format("$%d\r\n",value.getBytes().length));
     writer.write(String.format("%s\r\n",value));
 

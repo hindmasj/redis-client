@@ -19,6 +19,11 @@ import org.junit.Test;
 public class GeoipFileParserTest{
 
   private static final String REF_FILE_OUTPUT="data/geoipv4-reference.output";
+  private static final long EXPECTED_RECORDS=7;
+  private static final long EXPECTED_LINKS=Math.round(
+    Math.pow(2,32-24)+Math.pow(2,32-22)+Math.pow(2,32-18)+Math.pow(2,32-24)
+    +Math.pow(2,32-28)+Math.pow(2,32-21));
+  private static final int LINES_PER_RECORD=7;
 
   private Config config;
   private Path outputFile;
@@ -48,7 +53,7 @@ public class GeoipFileParserTest{
     testSubject.loadFile();
     testSubject.parseFile();
     assertTrue(testSubject.isFileParsed());
-    assertEquals(6,testSubject.getRecordCount());
+    assertEquals(EXPECTED_RECORDS,testSubject.getRecordCount());
   }
 
   @Test
@@ -61,6 +66,28 @@ public class GeoipFileParserTest{
       assertTrue("Does output file match reference",FileUtils.contentEquals(
       new File(REF_FILE_OUTPUT),outputFile.toFile()
       ));
+      long lineCount=Files.lines(outputFile).count();
+      assertEquals("Has right number of lines",
+        EXPECTED_RECORDS*LINES_PER_RECORD,
+        lineCount);
+    }catch(FileNotFoundException e){
+      fail(e.getMessage());
+    }catch(IOException e){
+      fail(e.getMessage());
+    }
+  }
+
+  @Test
+  public void testWriteLinksFile(){
+    testSubject.loadFile();
+    testSubject.parseFile();
+    try{
+      testSubject.writeLinksFile(outputFile);
+      assertTrue("Does output file exist",Files.exists(outputFile));
+      long lineCount=Files.lines(outputFile).count();
+      assertEquals("Has right number of lines",
+        EXPECTED_LINKS*LINES_PER_RECORD,
+        lineCount);
     }catch(FileNotFoundException e){
       fail(e.getMessage());
     }catch(IOException e){

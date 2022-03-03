@@ -36,6 +36,13 @@ $144
 *3
 $3
 SET
+$22
+geoipv4.54.9.47.164/32
+$149
+{"ipv4":"54.9.47.164/32","country":"Philippines","city":"San Miguel","provider":"Rippin, Wyman and Smith","latitude":8.955271,"longitude":126.009711}
+*3
+$3
+SET
 $26
 geoipv4.218.202.177.151/24
 $153

@@ -105,3 +105,7 @@ get geoipv4.172.78.81.101/32
 $142
 {"ipv4":"172.78.81.101/32","country":"China","city":"Damu","provider":"Barrows, Lang and Leannon","latitude":24.134518,"longitude":111.485304}
 ```
+
+## Search Demo
+
+If you have done all that you can run the command ``bin/search.sh`` to perform a demo search on some example addresses.

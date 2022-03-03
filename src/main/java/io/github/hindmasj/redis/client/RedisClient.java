@@ -26,10 +26,14 @@ public class RedisClient{
   public static final void main(String[] argv){
     logger.info("Redis Client Application");
     logger.info(String.format("Config says url=%s:%d",getRedisHost(),getRedisPort()));
-    jedisPool=new JedisPool(poolConfig,getRedisHost(),getRedisPort());
+    jedisPool=createJedisPool();
 
     RedisClient client=new RedisClient();
     client.runDemo(argv);
+  }
+
+  public static JedisPool createJedisPool(){
+    return new JedisPool(poolConfig,getRedisHost(),getRedisPort());
   }
 
   private void runDemo(String[] argv){

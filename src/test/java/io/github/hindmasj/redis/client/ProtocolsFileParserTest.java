@@ -5,30 +5,30 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class FileParserHelperTest{
+public class ProtocolsFileParserTest{
 
-  private FileParserHelper testSubject;
+  private ProtocolsFileParser testSubject;
 
   @Before
   public void init(){
-    testSubject=new FileParserHelper();
+    testSubject=new ProtocolsFileParser();
   }
 
   @Test
   public void testEmptyLine(){
-    assertNull(testSubject.parseLine(""));
+    assertNull(testSubject.parseFileLine(""));
   }
 
   @Test
   public void testPureComments(){
-    assertNull(testSubject.parseLine("#"));
-    assertNull(testSubject.parseLine("# some text"));
-    assertNull(testSubject.parseLine("#\tsome text"));
+    assertNull(testSubject.parseFileLine("#"));
+    assertNull(testSubject.parseFileLine("# some text"));
+    assertNull(testSubject.parseFileLine("#\tsome text"));
   }
 
   @Test
   public void testNoComments(){
-    FileRecordBean bean=testSubject.parseLine("fred\t99\tFRED");
+    ProtocolBean bean=testSubject.parseFileLine("fred\t99\tFRED");
     assertEquals("fred",bean.getName());
     assertEquals(99,bean.getCode());
     assertEquals("FRED",bean.getAlias());
@@ -37,7 +37,7 @@ public class FileParserHelperTest{
 
   @Test
   public void testWithComment(){
-    FileRecordBean bean=testSubject.parseLine("fred\t99\tFRED\t\t# some text");
+    ProtocolBean bean=testSubject.parseFileLine("fred\t99\tFRED\t\t# some text");
     assertEquals("fred",bean.getName());
     assertEquals(99,bean.getCode());
     assertEquals("FRED",bean.getAlias());
@@ -46,7 +46,7 @@ public class FileParserHelperTest{
 
   @Test
   public void testWithMultiAlias(){
-    FileRecordBean bean=testSubject.parseLine("fred\t99\tFRED\tFRED2\t# some text");
+    ProtocolBean bean=testSubject.parseFileLine("fred\t99\tFRED\tFRED2\t# some text");
     assertEquals("fred",bean.getName());
     assertEquals(99,bean.getCode());
     assertEquals("FRED, FRED2",bean.getAlias());
@@ -55,7 +55,7 @@ public class FileParserHelperTest{
 
   @Test
   public void testNoAlias(){
-    FileRecordBean bean=testSubject.parseLine("fred\t99\t\t\t# some text");
+    ProtocolBean bean=testSubject.parseFileLine("fred\t99\t\t\t# some text");
     assertEquals("fred",bean.getName());
     assertEquals(99,bean.getCode());
     assertEquals("",bean.getAlias());
@@ -64,7 +64,7 @@ public class FileParserHelperTest{
 
   @Test
   public void testHashName(){
-    FileRecordBean bean=testSubject.parseLine("#\t99\t\t\t# some text");
+    ProtocolBean bean=testSubject.parseFileLine("#\t99\t\t\t# some text");
     assertEquals("#",bean.getName());
     assertEquals(99,bean.getCode());
     assertEquals("",bean.getAlias());

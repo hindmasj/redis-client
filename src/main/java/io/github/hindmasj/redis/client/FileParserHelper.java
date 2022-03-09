@@ -2,8 +2,6 @@ package io.github.hindmasj.redis.client;
 
 import java.io.*;
 import java.nio.file.*;
-
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -12,24 +10,25 @@ import com.google.gson.Gson;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-public class FileParserHelper{
+public class FileParserHelper<T>{
 
   private static final Logger logger = LogManager.getLogger();
+  private final FileLinesParser<T> parser;
 
-  private final Map<Integer,FileRecordBean> recordMap=
-    new Hashtable<Integer,FileRecordBean>();
+  public FileParserHelper(FileLinesParser<T> parser){
+    this.parser=parser;
+  }
 
+  /** Parse a file line by line, using the supplied parser to parse the line and then
+    * ask the parser to store the result as it sees fit. */
   public boolean parseFile(String inputFileName){
     logger.info(String.format("Loading from %s",inputFileName));
-    recordMap.clear();
     Path filePath=Paths.get(inputFileName);
     try{
       try(Stream<String> lines = Files.lines(filePath)) {
         lines.forEach(line -> {
-          FileRecordBean bean=parseLine(line);
-          if(bean!=null){
-            recordMap.put(bean.getCode(),bean);
-          }
+          T parsedItem=parser.parseFileLine(line);
+          parser.storeParsedItem(parsedItem);
         });
       }
     }catch(FileNotFoundException e){
@@ -40,19 +39,20 @@ public class FileParserHelper{
       return false;
     }
 
-    logger.info(String.format("Loaded file %s",inputFileName));
+    logger.info(String.format("Parsed file %s",inputFileName));
     logger.info(
-      String.format("File parsed into memory with %d records.",getRecordCount()));
+      String.format("File parsed into memory with %d records.",parser.getRecordCount()));
     return true;
   }
 
-  public boolean writeFile(String outputFileName, String indexPrefix){
+  /** Write the parsed objects out from a map of stored objects */
+  public boolean writeFile(String outputFileName, String indexPrefix, Map store){
     Gson gson=new Gson();
     try{
       RedisFileWriter writer=new RedisFileWriter(outputFileName);
-      for(Integer key : recordMap.keySet()){
-        FileRecordBean bean=recordMap.get(key);
-        writer.addEntry(indexPrefix,key.toString(),gson.toJson(bean));
+      for(Object key : store.keySet()){
+        Object value=store.get(key);
+        writer.addEntry(indexPrefix,key.toString(),gson.toJson(value));
       }
       writer.close();
     }catch(IOException e){
@@ -61,44 +61,6 @@ public class FileParserHelper{
     }
     logger.info(String.format("Records written to output file %s.",outputFileName));
     return true;
-  }
-
-  public int getRecordCount(){
-    return recordMap.size();
-  }
-
-  public FileRecordBean parseLine(String line){
-    logger.debug("Parsing line: "+line);
-    String[] parsedArray=line.split("\t");
-    if(parsedArray.length < 2){
-      return null;
-    }
-    logger.debug("Line parses to "+parsedArray.length+" tokens");
-
-    String name=parsedArray[0];
-    int code=0;
-    try{
-      code=Integer.parseInt(parsedArray[1]);
-    }catch(NumberFormatException e){
-      return null;
-    }
-    String alias=parsedArray[2];
-
-    String comment="";
-    if(parsedArray.length>3){
-      for(int i=3;i<parsedArray.length;i++){
-        String token=parsedArray[i];
-        if(token.startsWith("#")){
-          comment=token.substring(1).trim();
-        }else{
-          if(!token.isEmpty()){
-            alias=alias+", "+token;
-          }
-        }
-      }
-    }
-
-    return new FileRecordBean(name,code,alias,comment.trim());
   }
 
 }

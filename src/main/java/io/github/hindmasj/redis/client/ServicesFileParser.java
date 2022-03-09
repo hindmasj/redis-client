@@ -13,7 +13,7 @@ public class ServicesFileParser{
   private static final Logger logger = LogManager.getLogger();
 
   public static final void main(String[] args) throws Exception{
-    FileParserHelper parser=new FileParserHelper();
+    /*FileParserHelper parser=new FileParserHelper();
 
     if(!parser.parseFile(INPUT_FILENAME)){
       logger.error("Could not parse input file.");
@@ -23,7 +23,7 @@ public class ServicesFileParser{
     if(!parser.writeFile(OUTPUT_FILENAME,INDEX_PREFIX)){
       logger.error("Could not save to output file.");
       System.exit(2);
-    }
+    }*/
   }
 
 }

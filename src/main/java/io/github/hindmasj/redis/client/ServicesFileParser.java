@@ -36,11 +36,68 @@ public class ServicesFileParser implements FileLinesParser<ServiceBean>{
 
   public ServiceBean parseFileLine(String line){
     logger.debug("Parsing line: "+line);
+    if(line.startsWith("#")){
+      return null;
+    }
 
-    /* DO SOME STUFF */
-    return null;
+    String[] tokens=line.split(" ");
+    if(tokens.length<2){
+      return null;
+    }
 
-    //return new ServiceBean(name,code,protocol,alias,comment.trim());
+    String name=null;
+    String protocol=null;
+    int code=0;
+    String alias=null;
+    String comment=null;
+    boolean isComment=false;
+
+    for(String token:tokens){
+      if(token.isEmpty()){
+        continue;
+      }
+
+      if(name==null){
+        name=token;
+        continue;
+      }
+
+      if(protocol==null){
+        String[] id=token.split("/");
+        try{
+          code=Integer.parseInt(id[0]);
+          protocol=id[1];
+        }catch(NumberFormatException e){
+          logger.error(String.format("Unable to parse integer value from %s in %s",token,line));
+          return null;
+        }catch(ArrayIndexOutOfBoundsException e){
+          logger.error(String.format("Unable to extract protocol from token %s in %s",token,line));
+          return null;
+        }
+        continue;
+      }
+
+      if(token.equals("#")){
+        isComment=true;
+        continue;
+      }
+
+      if(isComment){
+        if(comment==null){
+          comment=token;
+        }else{
+          comment=String.format("%s %s",comment,token);
+        }
+      }else{
+        if(alias==null){
+          alias=token;
+        }else{
+          alias=String.format("%s, %s",alias,token);
+        }
+      }
+    }
+
+    return new ServiceBean(name,code,protocol,alias,comment);
   }
 
   public void storeParsedItem(ServiceBean bean){

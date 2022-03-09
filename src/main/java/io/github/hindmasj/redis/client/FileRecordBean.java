@@ -1,13 +1,13 @@
 package io.github.hindmasj.redis.client;
 
-public class ProtocolBean{
+public class FileRecordBean{
 
   private String name;
   private int code;
   private String alias;
   private String comment;
 
-  public ProtocolBean(String name, int code, String alias, String comment){
+  public FileRecordBean(String name, int code, String alias, String comment){
     this.name=name;
     this.code=code;
     this.alias=alias;

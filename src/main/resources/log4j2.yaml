@@ -11,7 +11,7 @@ Configuration:
     logger:
       -
         name: io.github.hindmasj
-        level: debug
+        level: info
         additivity: false
         AppenderRef:
           ref: CONSOLE

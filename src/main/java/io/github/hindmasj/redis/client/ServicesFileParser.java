@@ -3,12 +3,12 @@ package io.github.hindmasj.redis.client;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-/** Processes the file /etc/protocols ready for loading as a Redis source */
-public class ProtocolsFileParser{
+/** Processes the file /etc/services ready for loading as a Redis source */
+public class ServicesFileParser{
 
-  public static final String INPUT_FILENAME="/etc/protocols";
-  public static final String OUTPUT_FILENAME="protocols.output";
-  public static final String INDEX_PREFIX="protocol.";
+  public static final String INPUT_FILENAME="/etc/services";
+  public static final String OUTPUT_FILENAME="services.output";
+  public static final String INDEX_PREFIX="service.";
 
   private static final Logger logger = LogManager.getLogger();
 

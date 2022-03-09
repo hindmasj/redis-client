@@ -16,6 +16,7 @@ public class ProtocolsFileParser{
 
   public static final String INPUT_FILENAME="/etc/protocols";
   public static final String OUTPUT_FILENAME="protocols.output";
+  public static final String INDEX_PREFIX="protocol.";
 
   private static final Logger logger = LogManager.getLogger();
 
@@ -35,16 +36,20 @@ public class ProtocolsFileParser{
       "File parsed into memory with %d records.",parser.getRecordCount()));
 
     Gson gson=new Gson();
-    for(Integer key : parser.protocolMap.keySet()){
-      ProtocolBean bean=parser.protocolMap.get(key);
-      String json=gson.toJson(bean);
-      System.out.println(key+" -> "+json);
+    try{
+      RedisFileWriter writer=new RedisFileWriter(OUTPUT_FILENAME);
+      for(Integer key : parser.protocolMap.keySet()){
+        ProtocolBean bean=parser.protocolMap.get(key);
+        writer.addEntry(INDEX_PREFIX,key.toString(),gson.toJson(bean));
+      }
+      writer.close();
+    }catch(IOException e){
+      logger.error("Could not save to otput file.",e);
+      System.exit(3);
     }
-/*
-    parser.writeFile(OUTPUT_FILENAME);
     logger.info(String.format(
       "Records written to output file %s.",OUTPUT_FILENAME));
-*/
+
   }
 
   public int getRecordCount(){

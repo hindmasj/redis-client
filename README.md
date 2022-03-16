@@ -109,3 +109,17 @@ $142
 ## Search Demo
 
 If you have done all that you can run the command ``bin/search.sh`` to perform a demo search on some example addresses.
+
+# Standard Files
+
+There are some scripts to turn the popular files */etc/services* and */etc/protocols* into indices.
+
+Run ``bin/staticParse.sh`` to create *services.output* and *protocols.output*. Load these into the server using the CLI pipe, then you can query them.
+
+```
+> get service.80/tcp
+"{\"name\":\"http\",\"code\":80,\"protocol\":\"tcp\",\"alias\":\"www, www-http\",\"comment\":\"WorldWideWeb HTTP\"}"
+
+> get protocol.17
+"{\"name\":\"udp\",\"code\":17,\"alias\":\"UDP\",\"comment\":\"user datagram protocol\"}"
+```

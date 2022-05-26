@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
+import java.util.EnumSet;
 import java.util.Set;
 
 import com.typesafe.config.Config;
@@ -35,7 +36,11 @@ public class GeoipFileParserTest{
   public void init() throws IOException{
     config=RedisClient.getConfig();
     FileAttribute<Set<PosixFilePermission>> writable=PosixFilePermissions.asFileAttribute​(
-      PosixFilePermissions.fromString("rw-rw-r--")
+      EnumSet.of(
+        PosixFilePermission.OWNER_READ,PosixFilePermission.OWNER_WRITE,
+        PosixFilePermission.GROUP_READ,PosixFilePermission.GROUP_WRITE,
+        PosixFilePermission.OTHERS_READ,PosixFilePermission.OTHERS_WRITE
+      )
     );
     outputFile=Files.createTempFile("output-",".output",writable);
     testSubject=new GeoipFileParser(config);

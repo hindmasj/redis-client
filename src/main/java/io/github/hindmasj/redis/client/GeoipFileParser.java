@@ -86,7 +86,14 @@ public class GeoipFileParser{
   public String sanitiseOutputPath(String rawPath){
     File relPath=new File(rawPath);
     try{
-      return relPath.getCanonicalPath();
+      File canonFile = relPath.getCanonicalFile();
+      File canonDir = canonFile.getParentFile();
+      if(!canonDir.canWrite()){
+        logger.error(String.format("Unwritable path :%s",canonDir));
+        throw new IllegalArgumentException(
+        String.format("Unable to write output file %s to path %s",rawPath,canonDir));
+      }
+      return canonFile.getPath();
     }catch(IOException e){
       logger.fatal(String.format("Illegal file path :%s",rawPath),e);
       throw new IllegalArgumentException(String.format("Unable to use output path %s"),e);

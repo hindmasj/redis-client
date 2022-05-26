@@ -95,11 +95,15 @@ public class GeoipFileParserTest{
     }
   }
 
-  @Test
+  @Test(expected=IllegalArgumentException.class)
   public void testFileNameSanitizer(){
+
     String goodTestValue="testfile";
     String absolutePath=new File(goodTestValue).getAbsolutePath();
     assertEquals(absolutePath,testSubject.sanitiseOutputPath(goodTestValue));
+
+    String badTestValue="/root/testfile";
+    testSubject.sanitiseOutputPath(badTestValue);
   }
 
   @After

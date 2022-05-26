@@ -95,6 +95,13 @@ public class GeoipFileParserTest{
     }
   }
 
+  @Test
+  public void testFileNameSanitizer(){
+    String goodTestValue="testfile";
+    String absolutePath=new File(goodTestValue).getAbsolutePath();
+    assertEquals(absolutePath,testSubject.sanitiseOutputPath(goodTestValue));
+  }
+
   @After
   public void tearDown() throws IOException{
     Files.deleteIfExists(outputFile);

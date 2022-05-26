@@ -40,9 +40,10 @@ public class GeoipFileParser{
       logger.error("You need to specify an output file.");
       System.exit(1);
     }
-    String outputFileName=args[0];
 
     GeoipFileParser parser=new GeoipFileParser(RedisClient.getConfig());
+    String outputFileName=parser.sanitiseOutputPath(args[0]);
+
     if(!parser.loadFile()){
       logger.error("Could not load input file.");
       System.exit(2);
@@ -80,6 +81,16 @@ public class GeoipFileParser{
 
   public boolean isFileParsed(){
     return fileParsed;
+  }
+
+  public String sanitiseOutputPath(String rawPath){
+    File relPath=new File(rawPath);
+    try{
+      return relPath.getCanonicalPath();
+    }catch(IOException e){
+      logger.fatal(String.format("Illegal file path :%s",rawPath),e);
+      throw new IllegalArgumentException(String.format("Unable to use output path %s"),e);
+    }
   }
 
   public boolean loadFile(){

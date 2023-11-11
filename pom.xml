@@ -12,7 +12,8 @@
 
   <properties>
     <revision>0.0.2-SNAPSHOT</revision>
-    <jackson.version>2.15.3</jackson.version>
+    <jackson.version>2.15.2</jackson.version>
+    <jedis.version>4.4.4</jedis.version>
   </properties>
 
   <dependencies>
@@ -52,7 +53,7 @@
     <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
-      <version>4.4.4</version>
+      <version>${jedis.version}</version>
     </dependency>
 
     <dependency>

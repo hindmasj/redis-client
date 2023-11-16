@@ -13,7 +13,7 @@
   <properties>
     <revision>0.0.2-SNAPSHOT</revision>
     <jackson.version>2.15.2</jackson.version>
-    <jedis.version>4.4.4</jedis.version>
+    <jedis.version>4.4.6</jedis.version>
   </properties>
 
   <dependencies>

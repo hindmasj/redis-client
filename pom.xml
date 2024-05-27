@@ -12,7 +12,7 @@
 
   <properties>
     <revision>0.0.2-SNAPSHOT</revision>
-    <jackson.version>2.17.0</jackson.version>
+    <jackson.version>2.17.1</jackson.version>
     <jedis.version>4.4.8</jedis.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>

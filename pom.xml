@@ -12,7 +12,7 @@
 
   <properties>
     <revision>0.0.2-SNAPSHOT</revision>
-    <jackson.version>2.18.0</jackson.version>
+    <jackson.version>2.18.3</jackson.version>
     <jedis.version>4.4.8</jedis.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>commons-net</groupId>
       <artifactId>commons-net</artifactId>
-      <version>3.11.0</version>
+      <version>3.11.1</version>
     </dependency>
 
     <!-- Needed for the log4j2 Yaml configuration -->
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>com.typesafe</groupId>
       <artifactId>config</artifactId>
-      <version>1.4.3</version>
+      <version>1.4.4</version>
     </dependency>
 
     <dependency>
